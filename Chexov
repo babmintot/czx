@@ -1,0 +1,56 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Параметры
+h = 1e-6  # шаг по времени, 1 мкс
+length = 20  # количество точек для моделирования
+time = np.arange(0, length * h, h)
+
+# Генерация всех возможных входных сигналов
+X1 = np.random.choice([0, 1], size=length)
+X2 = np.random.choice([0, 1], size=length)
+X3 = np.random.choice([0, 1], size=length)
+X4 = np.random.choice([0, 1], size=length)
+
+# Массив для выходных сигналов [a1, a2, EO]
+A = np.zeros((length, 3), dtype=int)
+
+for i in range(length):
+    if X1[i] == 1:
+        A[i] = [1, 1, 0]  # Устройство 1 активно
+    elif X2[i] == 1:
+        A[i] = [1, 0, 0]  # Устройство 2 активно
+    elif X3[i] == 1:
+        A[i] = [0, 1, 0]  # Устройство 3 активно
+    elif X4[i] == 1:
+        A[i] = [0, 0, 0]  # Устройство 4 активно
+    else:
+        A[i] = [0, 0, 1]  # Ни одно устройство не активно (EO = 1)
+
+# Визуализация входных сигналов
+plt.figure(figsize=(12, 8))
+
+plt.subplot(2, 1, 1)
+plt.title('Входные сигналы от устройств X1, X2, X3, X4')
+plt.plot(time, X1, label='X1', drawstyle='steps-post')
+plt.plot(time, X2, label='X2', drawstyle='steps-post')
+plt.plot(time, X3, label='X3', drawstyle='steps-post')
+plt.plot(time, X4, label='X4', drawstyle='steps-post')
+plt.ylim(-0.1, 1.5)
+plt.xlabel('Время (с)')
+plt.ylabel('Сигнал')
+plt.legend()
+
+# Визуализация выходных сигналов
+plt.subplot(2, 1, 2)
+plt.title('Выходные сигналы A1, A2 и EO')
+plt.plot(time, A[:, 0], label='A1', drawstyle='steps-post')
+plt.plot(time, A[:, 1], label='A2', drawstyle='steps-post')
+plt.plot(time, A[:, 2], label='EO', drawstyle='steps-post')
+plt.ylim(-0.1, 1.5)
+plt.xlabel('Время (с)')
+plt.ylabel('Сигнал')
+plt.legend()
+
+plt.tight_layout()
+plt.show()
